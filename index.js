@@ -58,7 +58,30 @@ if (typeof module === 'object' && module.exports) {
   
     if (_.isArray(data)) {
       resource.data = [];
-  
+
+      data.forEach(function(d, i) {
+        let n = {};
+
+        n.type = type;
+        n.id = d[id];
+        n.attributes = {};
+        
+        attributes.forEach((attrKey) => {
+          n.attributes[_.kebabCase(attrKey)] = d[attrKey];
+        });
+      
+        if (relationships.length > 0) {
+          n.relationships = {};
+    
+          relationships.forEach((rel) => {
+            n.relationships[rel.rel] = convert(rel.type, d[rel.rel]);
+          });
+        }
+
+        resource.data.push(n);
+      });
+
+      
     } else {
       resource.data = {};
       resource.data.type = type;
@@ -77,7 +100,7 @@ if (typeof module === 'object' && module.exports) {
         });
       }
     }
-  
+
     return resource;
   }
 
