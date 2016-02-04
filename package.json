@@ -1,0 +1,29 @@
+{
+  "name": "jsonapi-serializer-lite",
+  "version": "0.1.0",
+  "description": "Lightweight JSON API serializer",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha test --timeout 15000 --recursive --reporter list"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabriciotav/jsonapi-serializer-lite.git"
+  },
+  "keywords": [
+    "JSONAPI",
+    "serializer"
+  ],
+  "author": "Fabrício Tavares",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fabriciotav/jsonapi-serializer-lite/issues"
+  },
+  "homepage": "https://github.com/fabriciotav/jsonapi-serializer-lite",
+  "dependencies": {
+    "lodash": "4.2.1"
+  },
+  "devDependencies": {
+    "mocha": "2.4.5"
+  }
+}
