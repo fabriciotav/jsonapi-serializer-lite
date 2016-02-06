@@ -111,7 +111,7 @@ if (typeof module === 'object' && module.exports) {
    *
    * @return {object|array}
    */
-  jsl.convert = function convert(type, data) {
+  function convert(type, data) {
     let result = null;
   
     if (_.isArray(data)) {
