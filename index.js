@@ -67,7 +67,7 @@ if (typeof module === 'object' && module.exports) {
         n.attributes = {};
         
         attributes.forEach((attrKey) => {
-          n.attributes[_.kebabCase(attrKey)] = d[attrKey];
+          assignKey(attrKey, lookupKey(attrKey, d), n.attributes);
         });
       
         if (relationships.length > 0) {
@@ -89,7 +89,7 @@ if (typeof module === 'object' && module.exports) {
       resource.data.attributes = {};
       
       attributes.forEach((attrKey) => {
-        resource.data.attributes[_.kebabCase(attrKey)] = data[attrKey];
+        assignKey(attrKey, lookupKey(attrKey, data), resource.data.attributes);
       });
   
       if (relationships.length > 0) {
@@ -130,6 +130,61 @@ if (typeof module === 'object' && module.exports) {
     }
   
     return { data: result };
+  }
+
+  /**
+   *
+   */
+  function assignKey(key, value, hash) {
+    let keys = key.split('.');
+    keys = _.map(keys, _.kebabCase);
+    let elapsedIdx = [];
+  
+    if (keys.length === 1) {
+      hash[keys[0]] = value;
+      return hash;
+    }
+  
+    for (let i = 0; i < keys.length; i++) {
+      elapsedIdx.push(i);
+      if (i !== keys.length - 1) {
+  
+        if (_.isPlainObject(hash[keys[i]]) === false) {
+          let a = 'hash';
+          elapsedIdx.forEach((idx) => { a += '[keys[' + idx + ']]'});
+          a += '= {}';
+  
+          eval(a);
+        }
+  
+      } else {
+        let l = 'hash';
+        elapsedIdx.forEach((idx) => { l += '[keys[' + idx + ']]'});
+        l += '= value';
+  
+        eval(l);
+      }
+    }
+  
+    return hash;
+  }
+
+  /**
+   *
+   */
+  function lookupKey(key, hash) {
+      let firstKey;
+      let idx;
+      let remainingKeys;
+  
+    if (hash[key] !== undefined) { return hash[key]; }
+  
+    if ((idx = key.indexOf('.')) !== -1) {
+      firstKey = key.substr(0, idx);
+      remainingKeys = key.substr(idx + 1);
+      hash = hash[firstKey];
+      if (hash) { return lookupKey(remainingKeys, hash); }
+    }
   }
 
   if (typeof define === 'function' && define.amd) {
