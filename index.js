@@ -2,10 +2,11 @@
 
 if (typeof module === 'object' && module.exports) {
   var _ = require('lodash');
+  var ok = require('object-key');
 }
 
 !function() {
-  var jsl = { version: '0.1.0' };
+  var jsl = { version: '0.4.0' };
 
   /**
    * Flattens a JSONAPI object.
@@ -67,7 +68,7 @@ if (typeof module === 'object' && module.exports) {
         n.attributes = {};
         
         attributes.forEach((attrKey) => {
-          assignKey(attrKey, lookupKey(attrKey, d), n.attributes);
+          ok.assign(attrKey, ok.lookup(attrKey, d), n.attributes, 'kebab');
         });
       
         if (relationships.length > 0) {
@@ -89,7 +90,7 @@ if (typeof module === 'object' && module.exports) {
       resource.data.attributes = {};
       
       attributes.forEach((attrKey) => {
-        assignKey(attrKey, lookupKey(attrKey, data), resource.data.attributes);
+        ok.assign(attrKey, ok.lookup(attrKey, data), resource.data.attributes, 'kebab');
       });
   
       if (relationships.length > 0) {
@@ -130,61 +131,6 @@ if (typeof module === 'object' && module.exports) {
     }
   
     return { data: result };
-  }
-
-  /**
-   *
-   */
-  function assignKey(key, value, hash) {
-    let keys = key.split('.');
-    keys = _.map(keys, _.kebabCase);
-    let elapsedIdx = [];
-  
-    if (keys.length === 1) {
-      hash[keys[0]] = value;
-      return hash;
-    }
-  
-    for (let i = 0; i < keys.length; i++) {
-      elapsedIdx.push(i);
-      if (i !== keys.length - 1) {
-  
-        if (_.isPlainObject(hash[keys[i]]) === false) {
-          let a = 'hash';
-          elapsedIdx.forEach((idx) => { a += '[keys[' + idx + ']]'});
-          a += '= {}';
-  
-          eval(a);
-        }
-  
-      } else {
-        let l = 'hash';
-        elapsedIdx.forEach((idx) => { l += '[keys[' + idx + ']]'});
-        l += '= value';
-  
-        eval(l);
-      }
-    }
-  
-    return hash;
-  }
-
-  /**
-   *
-   */
-  function lookupKey(key, hash) {
-      let firstKey;
-      let idx;
-      let remainingKeys;
-  
-    if (hash[key] !== undefined) { return hash[key]; }
-  
-    if ((idx = key.indexOf('.')) !== -1) {
-      firstKey = key.substr(0, idx);
-      remainingKeys = key.substr(idx + 1);
-      hash = hash[firstKey];
-      if (hash) { return lookupKey(remainingKeys, hash); }
-    }
   }
 
   if (typeof define === 'function' && define.amd) {
