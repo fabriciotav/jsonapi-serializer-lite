@@ -54,6 +54,7 @@ if (typeof module === 'object' && module.exports) {
     let id = options.id || 'id';
     let attributes = options.attributes || [];
     let relationships = options.relationships || [];
+    let stringCase = options.stringCase || 'kebab';
   
     let resource = {};
   
@@ -68,7 +69,7 @@ if (typeof module === 'object' && module.exports) {
         n.attributes = {};
         
         attributes.forEach((attrKey) => {
-          ok.assign(attrKey, ok.lookup(attrKey, d), n.attributes, 'kebab');
+          ok.assign(attrKey, ok.lookup(attrKey, d), n.attributes, stringCase);
         });
       
         if (relationships.length > 0) {
@@ -90,7 +91,7 @@ if (typeof module === 'object' && module.exports) {
       resource.data.attributes = {};
       
       attributes.forEach((attrKey) => {
-        ok.assign(attrKey, ok.lookup(attrKey, data), resource.data.attributes, 'kebab');
+        ok.assign(attrKey, ok.lookup(attrKey, data), resource.data.attributes, stringCase);
       });
   
       if (relationships.length > 0) {
