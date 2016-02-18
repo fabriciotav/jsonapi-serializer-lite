@@ -22,7 +22,7 @@
   "homepage": "https://github.com/fabriciotav/jsonapi-serializer-lite",
   "dependencies": {
     "lodash": "4.2.1",
-    "object-key": "0.1.0"
+    "object-key": "0.2.0"
   },
   "devDependencies": {
     "mocha": "2.4.5"
