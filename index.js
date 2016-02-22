@@ -6,7 +6,7 @@ if (typeof module === 'object' && module.exports) {
 }
 
 !function() {
-  var jsl = { version: '0.6.1' };
+  var jsl = { version: '0.7.0' };
 
   /**
    * Flattens a JSONAPI object.
