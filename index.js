@@ -76,7 +76,7 @@ if (typeof module === 'object' && module.exports) {
           n.relationships = {};
     
           relationships.forEach((rel) => {
-            n.relationships[rel.rel] = convert(rel.type, d[rel.rel]);
+            n.relationships[_.kebabCase(rel.rel)] = convert(rel.type, d[rel.rel]);
           });
         }
 
@@ -98,7 +98,7 @@ if (typeof module === 'object' && module.exports) {
         resource.data.relationships = {};
   
         relationships.forEach((rel) => {
-          resource.data.relationships[rel.rel] = convert(rel.type, data[rel.rel]);
+          resource.data.relationships[_.kebabCase(rel.rel)] = convert(rel.type, data[rel.rel]);
         });
       }
     }
@@ -118,6 +118,7 @@ if (typeof module === 'object' && module.exports) {
   
     if (_.isArray(data)) {
       result = [];
+
       data.forEach((id) => {
         result.push({
           type: type,
@@ -125,9 +126,13 @@ if (typeof module === 'object' && module.exports) {
         });
       });
     } else {
-      result = {
-        type: type,
-        id: data
+      if (data) {
+        result = {
+          type: type,
+          id: data
+        }
+      } else {
+        result = null;
       }
     }
   

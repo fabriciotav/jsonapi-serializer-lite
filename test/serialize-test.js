@@ -9,7 +9,8 @@ describe('Serializer', function() {
     const toBeSerialized = {
       id: 'unique_id',
       fullName: 'Fabrício',
-      description: 'JSON API'
+      description: 'JSON API',
+      newEvent: '1'
     };
 
     const serialized = {
@@ -19,6 +20,14 @@ describe('Serializer', function() {
         attributes: {
           'full-name': 'Fabrício',
           description: 'JSON API'
+        },
+        relationships: {
+          'new-event': {
+            data: {
+              id: '1',
+              type: 'events'
+            }
+          }
         }
       }
     };
@@ -27,6 +36,10 @@ describe('Serializer', function() {
       attributes: [
         'fullName',
         'description'
+      ],
+
+      relationships: [
+        { rel: 'newEvent', type: 'events' }
       ]
     }));
   });
@@ -40,7 +53,8 @@ describe('Serializer', function() {
         "address": {
           "street": "A",
           "city": "City A"
-        }
+        },
+        newEvent: '2'
       },
       {
         id: 'unique-id-2',
@@ -74,6 +88,14 @@ describe('Serializer', function() {
               "street": "A",
               "city": "City A"
             }
+          },
+          relationships: {
+            'new-event': {
+              data: {
+                id: '2',
+                type: 'events'
+              }
+            }
           }
         },
 
@@ -87,6 +109,11 @@ describe('Serializer', function() {
               "street": "B",
               "city": "City B"
             }
+          },
+          relationships: {
+            'new-event': {
+              data: null
+            }
           }
         },
         {
@@ -99,6 +126,11 @@ describe('Serializer', function() {
               "street": "C",
               "city": "City C"
             }
+          },
+          relationships: {
+            'new-event': {
+              data: null
+            }
           }
         }
       ]
@@ -110,6 +142,10 @@ describe('Serializer', function() {
         'description',
         'address.street',
         'address.city'
+      ],
+
+      relationships: [
+        { rel: 'newEvent', type: 'events' }
       ]
     }));
   });
