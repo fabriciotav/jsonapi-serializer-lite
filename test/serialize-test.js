@@ -19,7 +19,8 @@ describe('Serializer', function() {
         type: 'users',
         attributes: {
           'full-name': 'Fabrício',
-          description: 'JSON API'
+          description: 'JSON API',
+          anniversary: null
         },
         relationships: {
           'new-event': {
@@ -35,7 +36,8 @@ describe('Serializer', function() {
     assert.deepEqual(serialized, serializer.serialize('users', toBeSerialized, {
       attributes: [
         'fullName',
-        'description'
+        'description',
+        'anniversary'
       ],
 
       relationships: [

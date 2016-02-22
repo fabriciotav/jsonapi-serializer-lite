@@ -69,7 +69,10 @@ if (typeof module === 'object' && module.exports) {
         n.attributes = {};
         
         attributes.forEach((attrKey) => {
-          ok.assign(n.attributes, attrKey, ok.lookup(attrKey, d), stringCase);
+          let value = ok.lookup(attrKey, d);
+          (value === undefined) ? value = null : value = value;
+
+          ok.assign(n.attributes, attrKey, value, stringCase);
         });
       
         if (relationships.length > 0) {
@@ -91,7 +94,10 @@ if (typeof module === 'object' && module.exports) {
       resource.data.attributes = {};
       
       attributes.forEach((attrKey) => {
-        ok.assign(resource.data.attributes, attrKey, ok.lookup(attrKey, data), stringCase);
+        let value = ok.lookup(attrKey, data);
+        (value === undefined) ? value = null : value = value;
+
+        ok.assign(resource.data.attributes, attrKey, value, stringCase);
       });
   
       if (relationships.length > 0) {
