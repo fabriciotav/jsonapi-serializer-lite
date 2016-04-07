@@ -28,8 +28,10 @@ if (typeof module === 'object' && module.exports) {
   
     relationships.forEach((rel) => {
       let data = body.data.relationships[rel].data;
-  
-      if (_.isArray(data)) {
+    
+      if (data === null) {
+        extRelationships[rel] = null;
+      } else if (_.isArray(data)) {
         let plucked = _.map(data, 'id');
         _.includes(extRelList, rel) ? extRelationships[rel] = plucked : resource[rel] = plucked;
       } else {

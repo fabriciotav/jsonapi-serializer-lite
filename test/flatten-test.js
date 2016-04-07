@@ -11,6 +11,18 @@ describe('Flatten', function() {
         attributes: {
           'full-name': 'Fabrício',
           description: 'JSON API'
+        },
+
+        relationships: {
+          'created-by': {
+            data: {
+              type: 'people',
+              id: '1'
+            }
+          },
+          'modified-by': {
+            data: null
+          }
         }
       }
     };
@@ -20,9 +32,12 @@ describe('Flatten', function() {
         fullName: 'Fabrício',
         description: 'JSON API'
       },
-      extRelationships: {}
+      extRelationships: {
+        'created-by': '1',
+        'modified-by': null
+      }
     };
 
-    assert.deepEqual(posFlatten, serializer.flatten(preFlatten));
+    assert.deepEqual(posFlatten, serializer.flatten(preFlatten, 'created-by', 'modified-by'));
   });
 });
