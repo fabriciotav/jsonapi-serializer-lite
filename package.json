@@ -1,6 +1,6 @@
 {
   "name": "jsonapi-serializer-lite",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Lightweight JSON API serializer",
   "main": "index.js",
   "scripts": {
@@ -21,8 +21,7 @@
   },
   "homepage": "https://github.com/fabriciotav/jsonapi-serializer-lite",
   "dependencies": {
-    "lodash": "4.2.1",
-    "object-key": "0.2.0"
+    "lodash": "4.10.0"
   },
   "devDependencies": {
     "mocha": "2.4.5"

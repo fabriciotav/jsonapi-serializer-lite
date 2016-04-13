@@ -2,61 +2,76 @@
 
 if (typeof module === 'object' && module.exports) {
   var _ = require('lodash');
-  var ok = require('object-key');
 }
 
 !function() {
-  var jsl = { version: '0.7.0' };
+  var jsl = { version: '0.8.0' };
 
   /**
-   * Flattens a JSONAPI object.
+   * Deserialize a JSONAPI object.
    *
-   * @param {oject} body
+   * Options default:
+   * 
+   * ```
+   * {
+   *   flat: true,
+   *   convertCase: 'camelCase'
+   * }
+   * ```
+   *
+   * @param {array} jsonapiObject
+   * @param {oject} options
    *
    * @return {object} Resource flattened
    */
-  jsl.flatten = function flatten(body, extRelList) {
-    let resource = {};
-    let extRelationships = {};
+  jsl.deserialize = function deserialize (jsonapiObject, options) {
+    options = options || {};
+    let flat = options.flat !== undefined ? options.flat : true;
+    let convertCase = options.convertCase || 'camelCase';
+
+    const jsonapiAttributes = _.keys(jsonapiObject.data.attributes);
+    const jsonapiRelationships = _.keys(jsonapiObject.data.relationships);
+
+    let attributes = {};
+    let relationships = {};
   
-    const attributes = _.keys(body.data.attributes);
-    const relationships = _.keys(body.data.relationships);
-  
-    attributes.forEach((attr) => {
-      resource[_.camelCase(attr)] = body.data.attributes[attr]
+    jsonapiAttributes.forEach((attr) => {
+      attributes[_[convertCase](attr)] = jsonapiObject.data.attributes[attr];
     });
   
-    relationships.forEach((rel) => {
-      let data = body.data.relationships[rel].data;
+    jsonapiRelationships.forEach((rel) => {
+      let data = jsonapiObject.data.relationships[rel].data;
     
       if (data === null) {
-        extRelationships[rel] = null;
+        relationships[_[convertCase](rel)] = null;
       } else if (_.isArray(data)) {
-        let plucked = _.map(data, 'id');
-        _.includes(extRelList, rel) ? extRelationships[rel] = plucked : resource[rel] = plucked;
+        relationships[_[convertCase](rel)] = _.map(data, 'id');
       } else {
-        _.includes(extRelList, rel) ? extRelationships[rel] = data.id : resource[rel] = data.id;
+        relationships[_[convertCase](rel)] = data.id;
       }
     });
-  
-    return { resource: resource, extRelationships: extRelationships };
+    
+    if (flat === true) {
+      return _.assign(attributes, relationships);
+    } else {
+      return { attributes: attributes, relationships: relationships };
+    }
   };
 
   /**
    * Serialize a flat structure into JSONAPI compliant.
    *
-   * @param {string} type
    * @param {object|array} data
    * @param {object} options
    *
    * @return {object}
    */
-  jsl.serialize = function serialize(type, data, options) {
+  jsl.serialize = function serialize (data, options) {
     // Default parameters
+    let type = options.type || 'resource';
     let id = options.id || 'id';
     let attributes = options.attributes || [];
     let relationships = options.relationships || [];
-    let stringCase = options.stringCase || 'kebab';
   
     let resource = {};
   
@@ -71,10 +86,14 @@ if (typeof module === 'object' && module.exports) {
         n.attributes = {};
         
         attributes.forEach((attrKey) => {
-          let value = ok.lookup(attrKey, d);
+          let value = _.head(_.at(d, attrKey));
           (value === undefined) ? value = null : value = value;
 
-          ok.assign(n.attributes, attrKey, value, stringCase);
+          let keys = attrKey.split('.');
+          keys = _.map(keys, _.kebabCase);
+          keys = keys.join('.');
+
+          _.set(n.attributes, keys, value);
         });
       
         if (relationships.length > 0) {
@@ -88,7 +107,6 @@ if (typeof module === 'object' && module.exports) {
         resource.data.push(n);
       });
 
-      
     } else {
       resource.data = {};
       resource.data.type = type;
@@ -96,10 +114,14 @@ if (typeof module === 'object' && module.exports) {
       resource.data.attributes = {};
       
       attributes.forEach((attrKey) => {
-        let value = ok.lookup(attrKey, data);
+        let value = _.head(_.at(data, attrKey));
         (value === undefined) ? value = null : value = value;
 
-        ok.assign(resource.data.attributes, attrKey, value, stringCase);
+        let keys = attrKey.split('.');
+          keys = _.map(keys, _.kebabCase);
+          keys = keys.join('.');
+
+          _.set(resource.data.attributes, keys, value);
       });
   
       if (relationships.length > 0) {
@@ -121,7 +143,7 @@ if (typeof module === 'object' && module.exports) {
    *
    * @return {object|array}
    */
-  function convert(type, data) {
+  function convert (type, data) {
     let result = null;
   
     if (_.isArray(data)) {
@@ -138,7 +160,7 @@ if (typeof module === 'object' && module.exports) {
         result = {
           type: type,
           id: data
-        }
+        };
       } else {
         result = null;
       }

@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert');
-const serializer = require('../index');
+const jsl = require('../index');
 
 describe('Serializer', function() {
   it('should serialize object 1', function() {
@@ -33,7 +33,9 @@ describe('Serializer', function() {
       }
     };
 
-    assert.deepEqual(serialized, serializer.serialize('users', toBeSerialized, {
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      type: 'users',
+
       attributes: [
         'fullName',
         'description',
@@ -138,7 +140,9 @@ describe('Serializer', function() {
       ]
     };
 
-    assert.deepEqual(serialized, serializer.serialize('users', toBeSerialized, {
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      type: 'users',
+
       attributes: [
         'fullName',
         'description',
@@ -177,7 +181,9 @@ describe('Serializer', function() {
       }
     };
 
-    assert.deepEqual(serialized, serializer.serialize('users', toBeSerialized, {
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      type: 'users',
+      
       attributes: [
         'fullName',
         'settings.lang'
