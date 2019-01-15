@@ -1,6 +1,6 @@
 {
   "name": "jsonapi-serializer-lite",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Lightweight JSON API serializer",
   "main": "index.js",
   "scripts": {
