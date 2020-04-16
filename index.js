@@ -72,6 +72,7 @@ if (typeof module === 'object' && module.exports) {
     let id = options.id || 'id';
     let attributes = options.attributes || [];
     let relationships = options.relationships || [];
+    let digitAsWord = Object.prototype.hasOwnProperty.call(options, 'digitAsWord') ? options.digitAsWord : true;
   
     let resource = {};
   
@@ -90,7 +91,7 @@ if (typeof module === 'object' && module.exports) {
           (value === undefined) ? value = null : value = value;
 
           let keys = attrKey.split('.');
-          keys = _.map(keys, _.kebabCase);
+          keys = keys.map((key) => dasherize(key, digitAsWord));
           keys = keys.join('.');
 
           _.set(n.attributes, keys, value);
@@ -100,7 +101,7 @@ if (typeof module === 'object' && module.exports) {
           n.relationships = {};
     
           relationships.forEach((rel) => {
-            n.relationships[_.kebabCase(rel.rel)] = convert(rel.type, d[rel.rel]);
+            n.relationships[dasherize(rel.rel, digitAsWord)] = convert(rel.type, d[rel.rel]);
           });
         }
 
@@ -118,7 +119,7 @@ if (typeof module === 'object' && module.exports) {
         (value === undefined) ? value = null : value = value;
 
         let keys = attrKey.split('.');
-          keys = _.map(keys, _.kebabCase);
+          keys = keys.map((key) => dasherize(key, digitAsWord));
           keys = keys.join('.');
 
           _.set(resource.data.attributes, keys, value);
@@ -128,12 +129,28 @@ if (typeof module === 'object' && module.exports) {
         resource.data.relationships = {};
   
         relationships.forEach((rel) => {
-          resource.data.relationships[_.kebabCase(rel.rel)] = convert(rel.type, data[rel.rel]);
+          resource.data.relationships[dasherize(rel.rel, digitAsWord)] = convert(rel.type, data[rel.rel]);
         });
       }
     }
 
     return resource;
+  }
+
+  /**
+   *
+   *
+   * @param {string} str
+   *
+   * @return {string}
+   */
+  function dasherize(str, digitAsWord) {
+    if (digitAsWord === true) {
+      return _.kebabCase(str);
+    } else {
+      const STRING_DECAMELIZE_REGEXP = /([a-z\d])([A-Z])/g;
+      return str.replace(STRING_DECAMELIZE_REGEXP, '$1-$2').toLowerCase();
+    }
   }
 
   /**

@@ -190,4 +190,189 @@ describe('Serializer', function() {
       ]
     }));
   });
+
+  // ---
+
+  it('should serialize object 3', function() {
+
+    const toBeSerialized = {
+      id: 'unique_id',
+      addressLine1: 'Local Avenue',
+      addressLine2: '8080'
+    };
+
+    const serialized = {
+      data: {
+        id: 'unique_id',
+        type: 'users',
+        attributes: {
+          'address-line1': 'Local Avenue',
+          'address-line2': '8080'
+        }
+      }
+    };
+
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      digitAsWord: false,
+      
+      type: 'users',
+      
+      attributes: [
+        'addressLine1',
+        'addressLine2'
+      ]
+    }));
+  });
+
+  // ---
+
+  it('should serialize object 4', function() {
+
+    const toBeSerialized = {
+      id: 'unique_id',
+      addressLine1AndLine2: 'Local Avenue, 8080'
+    };
+
+    const serialized = {
+      data: {
+        id: 'unique_id',
+        type: 'users',
+        attributes: {
+          'address-line1-and-line2': 'Local Avenue, 8080'
+        }
+      }
+    };
+
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      digitAsWord: false,
+      
+      type: 'users',
+      
+      attributes: [
+        'addressLine1AndLine2'
+      ]
+    }));
+  });
+
+  // ---
+
+  it('should serialize object 5', function() {
+
+    const toBeSerialized = {
+      id: 'unique_id',
+      addressLine1: 'Local Avenue',
+      addressLine2: '8080'
+    };
+
+    const serialized = {
+      data: {
+        id: 'unique_id',
+        type: 'users',
+        attributes: {
+          'address-line-1': 'Local Avenue',
+          'address-line-2': '8080'
+        }
+      }
+    };
+
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      digitAsWord: true,
+      
+      type: 'users',
+      
+      attributes: [
+        'addressLine1',
+        'addressLine2'
+      ]
+    }));
+  });
+
+  // ---
+
+  it('should serialize object 6', function() {
+
+    const toBeSerialized = {
+      id: 'unique_id',
+      addressLine1AndLine2: 'Local Avenue, 8080'
+    };
+
+    const serialized = {
+      data: {
+        id: 'unique_id',
+        type: 'users',
+        attributes: {
+          'address-line-1-and-line-2': 'Local Avenue, 8080'
+        }
+      }
+    };
+
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      digitAsWord: true,
+      
+      type: 'users',
+      
+      attributes: [
+        'addressLine1AndLine2'
+      ]
+    }));
+  });
+
+  // ---
+
+  it('should serialize object 7', function() {
+
+    const toBeSerialized = {
+      id: 'unique_id',
+      addressLine1: 'Local Avenue',
+      addressLine2: '8080'
+    };
+
+    const serialized = {
+      data: {
+        id: 'unique_id',
+        type: 'users',
+        attributes: {
+          'address-line-1': 'Local Avenue',
+          'address-line-2': '8080'
+        }
+      }
+    };
+
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      type: 'users',
+      
+      attributes: [
+        'addressLine1',
+        'addressLine2'
+      ]
+    }));
+  });
+
+  // ---
+
+  it('should serialize object 8', function() {
+
+    const toBeSerialized = {
+      id: 'unique_id',
+      addressLine1AndLine2: 'Local Avenue, 8080'
+    };
+
+    const serialized = {
+      data: {
+        id: 'unique_id',
+        type: 'users',
+        attributes: {
+          'address-line-1-and-line-2': 'Local Avenue, 8080'
+        }
+      }
+    };
+
+    assert.deepEqual(serialized, jsl.serialize(toBeSerialized, {
+      type: 'users',
+      
+      attributes: [
+        'addressLine1AndLine2'
+      ]
+    }));
+  });
 });
